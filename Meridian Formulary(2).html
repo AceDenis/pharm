@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Murithi's</title>
+<style>
+:root{
+  --bg:#0a0d16; --border:#232a45; --text:#e9eaf3; --muted:#7c86a6;
+  --gold:#e8a94e; --pink:#f4759b; --cyan:#3fd6c8; --orange:#f0973b; --green:#7ee787; --purple:#b79bf5;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); box-sizing:border-box;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
+.wrap{max-width:900px;margin:0 auto;padding:28px 20px 60px}
+.header{display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:26px}
+.logo{width:46px;height:46px;border:1px solid var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:22px;font-family:Georgia,serif;flex:none}
+.brand{display:flex;gap:12px;align-items:center;margin-right:auto;cursor:pointer}
+.brand h1{font-family:Georgia,'Times New Roman',serif;font-size:22px;margin:0}
+.brand .sub{color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-top:2px}
+.search{background:#0d1120;border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:8px;font-size:14px;min-width:200px}
+.meta{color:var(--muted);font-family:'Courier New',monospace;font-size:13px;white-space:nowrap}
+.addbtn{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:9px 14px;border-radius:8px;font-size:13px;cursor:pointer;white-space:nowrap}
+.addbtn:hover{background:rgba(232,169,78,.1)}
+.panel{border:1px solid var(--border);border-radius:12px;padding:24px}
+.eyebrow{color:var(--muted);font-family:'Courier New',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+.back{color:var(--cyan);font-family:'Courier New',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:inline-block;margin-bottom:18px}
+.back:hover{text-decoration:underline}
+.row{display:flex;justify-content:space-between;align-items:center;padding:14px 4px;border-bottom:1px solid var(--border);cursor:pointer}
+.row:last-child{border-bottom:none}
+.row:hover{color:var(--gold)}
+.rowlink{flex:1;min-width:0;cursor:pointer}
+.rowactions{display:flex;align-items:center;gap:8px;flex:none}
+.iconbtn{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 8px;font-size:13px;cursor:pointer;line-height:1}
+.iconbtn:hover{color:var(--text);border-color:var(--gold)}
+.row .count{color:var(--pink);font-family:'Courier New',monospace}
+.drugname{font-size:17px}
+.drugsub{color:var(--muted);font-size:13px;margin-top:2px}
+.drug-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
+.drug-head h1{font-family:Georgia,serif;font-size:34px;margin:6px 0 4px}
+.hl{text-align:right;flex:none}
+.hlval{color:var(--cyan);font-size:22px;font-family:'Courier New',monospace}
+.infobar{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0 26px}
+.infobox{border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.infobox div:last-child{font-size:15px;margin-top:2px}
+.section{margin-bottom:20px}
+.label{font-family:'Courier New',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+.label.orange{color:var(--orange)} .label.cyan{color:var(--cyan)} .label.green{color:var(--green)}
+.label.purple{color:var(--purple)} .label.pink{color:var(--pink)}
+.section p{margin:0;font-size:15px}
+.footer{color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:36px;padding-top:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{margin-bottom:14px;display:flex;flex-direction:column;gap:6px}
+.fg label{font-size:12px;color:var(--muted)}
+.fg input,.fg select,.fg textarea{background:#0d1120;border:1px solid var(--border);color:var(--text);padding:10px;border-radius:8px;font-family:inherit;font-size:14px}
+.fg textarea{min-height:60px;resize:vertical}
+.submit-btn{background:var(--gold);color:#1a1305;border:none;padding:12px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-top:6px}
+.submit-btn:hover{opacity:.9}
+.empty{color:var(--muted);padding:20px 4px}
+@media(max-width:600px){.grid2,.infobar{grid-template-columns:1fr}.header{gap:10px}.search{min-width:140px;flex:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="brand" onclick="showHome()">
+      <div class="logo">&phi;</div>
+      <div><h1>MURITHI'S</h1><div class="sub">Pharmacology Reference</div></div>
+    </div>
+    <input class="search" id="searchBox" placeholder="Search drugs…" oninput="doSearch(this.value)">
+    <div class="meta" id="metaCount"></div>
+    <button class="addbtn" onclick="showAdd()">+ Add Drug</button>
+    <button class="addbtn" onclick="showManage()">Manage</button>
+  </div>
+  <div id="content"></div>
+  <div class="footer">© <span id="yr"></span> Murithi's — for education purposes only.</div>
+</div>
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+const SEED = [
+ {name:"Amoxicillin",cls:"Antibiotics",sub:"&beta;-Lactam &middot; Penicillin",route:"PO",clr:"Renal",hl:"1.3 h",
+  moa:"Binds penicillin-binding proteins, blocking peptidoglycan cross-linking in the bacterial cell wall (bactericidal).",
+  ind:"Otitis media, sinusitis, streptococcal pharyngitis, uncomplicated UTIs, dental infections.",
+  dose:"250–500 mg PO q8h, or 500–875 mg q12h depending on severity.",
+  adr:"GI upset, diarrhea, rash; rare anaphylaxis or C. difficile colitis.",
+  contra:"Penicillin allergy; use caution in infectious mononucleosis (rash risk)."},
+ {name:"Lisinopril",cls:"Antihypertensives",sub:"ACE Inhibitor",route:"PO",clr:"Renal",hl:"12 h",
+  moa:"Inhibits ACE, reducing angiotensin II formation and aldosterone release, lowering vascular resistance.",
+  ind:"Hypertension, heart failure, post-MI management, diabetic nephropathy.",
+  dose:"Start 10 mg PO daily; titrate up to 40 mg daily as tolerated.",
+  adr:"Dry cough, hyperkalemia, angioedema, hypotension.",
+  contra:"Pregnancy, bilateral renal artery stenosis, history of ACE-inhibitor angioedema."},
+ {name:"Metformin",cls:"Antidiabetics",sub:"Biguanide",route:"PO",clr:"Renal",hl:"6.2 h",
+  moa:"Decreases hepatic gluconeogenesis and increases peripheral insulin sensitivity without stimulating insulin release.",
+  ind:"First-line therapy for type 2 diabetes mellitus.",
+  dose:"500 mg PO BID with meals; titrate to a max of 2000 mg/day.",
+  adr:"GI upset, diarrhea, vitamin B12 deficiency; rare lactic acidosis.",
+  contra:"eGFR <30, acute kidney injury, severe hepatic impairment, around iodinated contrast studies."},
+ {name:"Warfarin",cls:"Anticoagulants",sub:"Vitamin K Antagonist",route:"PO",clr:"Hepatic",hl:"20–60 h",
+  moa:"Inhibits vitamin K epoxide reductase, blocking synthesis of clotting factors II, VII, IX, and X.",
+  ind:"Atrial fibrillation, mechanical heart valves, VTE prophylaxis and treatment.",
+  dose:"Individualized, typically 2–10 mg PO daily; titrate to target INR.",
+  adr:"Bleeding, bruising; rare skin necrosis with protein C/S deficiency.",
+  contra:"Active bleeding, pregnancy, severe hepatic disease."},
+ {name:"Atorvastatin",cls:"Statins",sub:"HMG-CoA Reductase Inhibitor",route:"PO",clr:"Hepatic",hl:"14 h",
+  moa:"Inhibits HMG-CoA reductase, reducing hepatic cholesterol synthesis and upregulating LDL receptors.",
+  ind:"Hyperlipidemia; primary and secondary prevention of atherosclerotic cardiovascular disease.",
+  dose:"10–80 mg PO once daily, any time of day.",
+  adr:"Myalgia, elevated liver enzymes; rare rhabdomyolysis.",
+  contra:"Active liver disease, pregnancy, breastfeeding."},
+ {name:"Sertraline",cls:"Antidepressants",sub:"SSRI",route:"PO",clr:"Hepatic",hl:"26 h",
+  moa:"Selectively inhibits presynaptic serotonin reuptake, increasing synaptic serotonin availability.",
+  ind:"Major depressive disorder, generalized anxiety, PTSD, OCD, panic disorder.",
+  dose:"Start 50 mg PO daily; titrate within 50–200 mg/day.",
+  adr:"GI upset, insomnia, sexual dysfunction; serotonin syndrome risk.",
+  contra:"MAOI use within 14 days; caution combined with other serotonergic drugs."},
+ {name:"Levetiracetam",cls:"Antiepileptics",sub:"SV2A Modulator",route:"PO / IV",clr:"Renal",hl:"6–8 h",
+  moa:"Binds synaptic vesicle protein SV2A, modulating neurotransmitter release; precise mechanism unclear.",
+  ind:"Partial-onset, myoclonic, and tonic-clonic seizures.",
+  dose:"500 mg PO/IV BID; titrate up to 1500 mg BID.",
+  adr:"Somnolence, irritability, behavioral changes.",
+  contra:"Hypersensitivity; dose-adjust for renal impairment."},
+ {name:"Albuterol",cls:"Bronchodilators",sub:"SABA",route:"Inhaled",clr:"Hepatic",hl:"3.8 h",
+  moa:"Stimulates &beta;2-adrenergic receptors, causing bronchial smooth muscle relaxation.",
+  ind:"Acute bronchospasm, asthma, COPD exacerbations.",
+  dose:"2 puffs (90 mcg/puff) q4-6h PRN, or 2.5 mg via nebulizer.",
+  adr:"Tachycardia, tremor, hypokalemia.",
+  contra:"Hypersensitivity to albuterol; caution in tachyarrhythmias."},
+ {name:"Diphenhydramine",cls:"Antihistamines",sub:"1st-gen H1 Antagonist",route:"PO / IV",clr:"Hepatic",hl:"4–8 h",
+  moa:"Blocks H1 histamine receptors and crosses the blood-brain barrier, causing sedation.",
+  ind:"Allergic reactions, urticaria, insomnia, antiemetic, extrapyramidal symptoms.",
+  dose:"25–50 mg PO/IV q6-8h PRN.",
+  adr:"Sedation, anticholinergic effects, paradoxical excitation in children.",
+  contra:"Narrow-angle glaucoma, BPH, neonates."},
+ {name:"Ibuprofen",cls:"Analgesics",sub:"NSAID",route:"PO",clr:"Hepatic / Renal",hl:"2 h",
+  moa:"Nonselectively inhibits COX-1/COX-2, reducing prostaglandin synthesis (analgesic, antipyretic, anti-inflammatory).",
+  ind:"Mild-to-moderate pain, fever, inflammation, dysmenorrhea.",
+  dose:"200–400 mg PO q4-6h PRN, max 3200 mg/day.",
+  adr:"GI ulceration, renal impairment, fluid retention.",
+  contra:"Active GI bleed, severe renal/hepatic disease, third-trimester pregnancy."}
+];
+
+function slug(s){return s.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');}
+function esc(s){ return String(s).replace(/'/g,"\\'"); }
+let DRUGS;
+try{ DRUGS = JSON.parse(localStorage.getItem('meridian_drugs')); }catch(e){ DRUGS = null; }
+if(!DRUGS || !DRUGS.length){ DRUGS = SEED.map(d=>({...d,id:slug(d.name)})); save(); }
+function save(){ localStorage.setItem('meridian_drugs', JSON.stringify(DRUGS)); }
+
+let state = {type:'home'};
+function showHome(){ state={type:'home'}; document.getElementById('searchBox').value=''; render(); }
+function showClass(name){ state={type:'class',name}; render(); }
+function showDrug(id){ state={type:'drug',id}; render(); }
+function showManage(){ state={type:'manage'}; render(); }
+function showAdd(){ state={type:'add',editId:null}; render(); }
+function editDrug(id){ state={type:'add',editId:id}; render(); }
+function doSearch(q){ if(!q){ render(); return; } state={type:'search',q}; renderContent(); }
+
+function deleteDrug(id){
+  const d = DRUGS.find(x=>x.id===id);
+  if(!d) return;
+  if(!confirm(`Delete ${d.name}? This can't be undone.`)) return;
+  DRUGS = DRUGS.filter(x=>x.id!==id);
+  save();
+  render();
+}
+function renameClass(name){
+  const next = prompt(`Rename class "${name}" to:`, name);
+  if(!next) return;
+  const n = next.trim();
+  if(!n || n===name) return;
+  DRUGS.forEach(d=>{ if(d.cls===name) d.cls=n; });
+  save();
+  render();
+}
+function deleteClass(name){
+  const count = DRUGS.filter(d=>d.cls===name).length;
+  if(!confirm(`Delete class "${name}" and its ${count} drug(s)? This can't be undone.`)) return;
+  DRUGS = DRUGS.filter(d=>d.cls!==name);
+  save();
+  render();
+}
+
+function classesWithCounts(){
+  const m={};
+  DRUGS.forEach(d=>{ m[d.cls]=(m[d.cls]||0)+1; });
+  return Object.keys(m).sort((a,b)=>a.localeCompare(b)).map(name=>({name,count:m[name]}));
+}
+
+function render(){
+  document.getElementById('metaCount').textContent = classesWithCounts().length + ' classes';
+  renderContent();
+}
+
+function renderContent(){
+  const el = document.getElementById('content');
+  if(state.type==='home'){
+    const cls = classesWithCounts();
+    el.innerHTML = `<div class="panel"><div class="eyebrow">Drug Classes</div>` +
+      cls.map(c=>`<div class="row" onclick="showClass('${esc(c.name)}')"><span>${c.name}</span><span class="count">${c.count}</span></div>`).join('') +
+      `</div>`;
+  } else if(state.type==='class'){
+    const items = DRUGS.filter(d=>d.cls===state.name).sort((a,b)=>a.name.localeCompare(b.name));
+    el.innerHTML = `<div class="panel"><a class="back" onclick="showHome()">&larr; All Classes</a>` +
+      `<div class="eyebrow">${state.name}</div>` +
+      items.map(d=>`<div class="row" onclick="showDrug('${esc(d.id)}')"><div><div class="drugname">${d.name}</div><div class="drugsub">${d.sub}</div></div></div>`).join('') +
+      `</div>`;
+  } else if(state.type==='drug'){
+    const d = DRUGS.find(x=>x.id===state.id);
+    if(!d){ showHome(); return; }
+    el.innerHTML = `<div class="panel">
+      <a class="back" onclick="showClass('${esc(d.cls)}')">&larr; Back to List</a>
+      <div class="drug-head">
+        <div>
+          <div class="eyebrow">${d.name.toUpperCase()} &middot; ${d.sub.replace(/&middot;.*/,'').toUpperCase()}</div>
+          <h1>${d.name}</h1>
+          <div class="drugsub">${d.cls}</div>
+        </div>
+        <div class="hl"><div class="eyebrow">Half-life</div><div class="hlval">${d.hl}</div></div>
+      </div>
+      <div class="infobar">
+        <div class="infobox"><div class="eyebrow">Route</div><div>${d.route}</div></div>
+        <div class="infobox"><div class="eyebrow">Class</div><div>${d.sub}</div></div>
+        <div class="infobox"><div class="eyebrow">Clearance</div><div>${d.clr}</div></div>
+      </div>
+      <div class="section"><div class="label orange">Mechanism of Action</div><p>${d.moa}</p></div>
+      <div class="section"><div class="label cyan">Indications</div><p>${d.ind}</p></div>
+      <div class="section"><div class="label green">Dosing</div><p>${d.dose}</p></div>
+      <div class="section"><div class="label purple">Adverse Effects</div><p>${d.adr}</p></div>
+      <div class="section"><div class="label pink">Contraindications &amp; Interactions</div><p>${d.contra}</p></div>
+    </div>`;
+  } else if(state.type==='search'){
+    const q = state.q.toLowerCase();
+    const items = DRUGS.filter(d=>d.name.toLowerCase().includes(q) || d.cls.toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name));
+    el.innerHTML = `<div class="panel"><div class="eyebrow">Results for "${state.q}"</div>` +
+      (items.length ? items.map(d=>`<div class="row" onclick="showDrug('${esc(d.id)}')"><div><div class="drugname">${d.name}</div><div class="drugsub">${d.cls} &middot; ${d.sub}</div></div></div>`).join('')
+                    : `<div class="empty">No drugs match that search.</div>`) +
+      `</div>`;
+  } else if(state.type==='manage'){
+    const cls = classesWithCounts();
+    const drugs = [...DRUGS].sort((a,b)=>a.name.localeCompare(b.name));
+    el.innerHTML = `<div class="panel">
+      <a class="back" onclick="showHome()">&larr; Home</a>
+      <div class="eyebrow">Manage Classes</div>` +
+      cls.map(c=>`<div class="row">
+        <span>${c.name}</span>
+        <div class="rowactions">
+          <span class="count">${c.count}</span>
+          <button class="iconbtn" onclick="renameClass('${esc(c.name)}')" title="Rename class">&#9998;</button>
+          <button class="iconbtn" onclick="deleteClass('${esc(c.name)}')" title="Delete class">&#128465;</button>
+        </div>
+      </div>`).join('') +
+      `<div class="eyebrow" style="margin-top:26px">Manage Drugs</div>` +
+      drugs.map(d=>`<div class="row">
+        <div class="rowlink" onclick="showDrug('${esc(d.id)}')"><div class="drugname">${d.name}</div><div class="drugsub">${d.cls} &middot; ${d.sub}</div></div>
+        <div class="rowactions">
+          <button class="iconbtn" onclick="editDrug('${esc(d.id)}')" title="Edit drug">&#9998;</button>
+          <button class="iconbtn" onclick="deleteDrug('${esc(d.id)}')" title="Delete drug">&#128465;</button>
+        </div>
+      </div>`).join('') +
+      `</div>`;
+  } else if(state.type==='add'){
+    const cls = classesWithCounts().map(c=>c.name);
+    const editing = !!state.editId;
+    const d = editing ? DRUGS.find(x=>x.id===state.editId) : null;
+    const v = k => d ? d[k] : '';
+    el.innerHTML = `<div class="panel">
+      <a class="back" onclick="showHome()">&larr; All Classes</a>
+      <div class="eyebrow">${editing ? 'Edit Drug' : 'Add New Drug'}</div>
+      <form onsubmit="return submitDrug(event)">
+        <div class="grid2">
+          <div class="fg"><label>Drug name *</label><input required id="f-name" value="${v('name')}"></div>
+          <div class="fg"><label>Class *</label><select id="f-cls" onchange="document.getElementById('newClassWrap').style.display=this.value==='__new'?'flex':'none'">
+            ${cls.map(c=>`<option value="${c}" ${d && d.cls===c ? 'selected':''}>${c}</option>`).join('')}<option value="__new">+ New class…</option></select></div>
+        </div>
+        <div class="fg" id="newClassWrap" style="display:none"><label>New class name</label><input id="f-newcls"></div>
+        <div class="grid2">
+          <div class="fg"><label>Category / subclass</label><input id="f-sub" placeholder="e.g. ACE Inhibitor" value="${v('sub')}"></div>
+          <div class="fg"><label>Half-life</label><input id="f-hl" placeholder="e.g. 12 h" value="${v('hl')}"></div>
+        </div>
+        <div class="grid2">
+          <div class="fg"><label>Route</label><input id="f-route" placeholder="e.g. PO / IV" value="${v('route')}"></div>
+          <div class="fg"><label>Clearance</label><input id="f-clr" placeholder="e.g. Renal" value="${v('clr')}"></div>
+        </div>
+        <div class="fg"><label style="color:var(--orange)">Mechanism of action</label><textarea id="f-moa">${v('moa')}</textarea></div>
+        <div class="fg"><label style="color:var(--cyan)">Indications</label><textarea id="f-ind">${v('ind')}</textarea></div>
+        <div class="fg"><label style="color:var(--green)">Dosing</label><textarea id="f-dose">${v('dose')}</textarea></div>
+        <div class="fg"><label style="color:var(--purple)">Adverse effects</label><textarea id="f-adr">${v('adr')}</textarea></div>
+        <div class="fg"><label style="color:var(--pink)">Contraindications &amp; interactions</label><textarea id="f-contra">${v('contra')}</textarea></div>
+        <button class="submit-btn" type="submit">${editing ? 'Save Changes' : 'Save Drug'}</button>
+      </form>
+    </div>`;
+  }
+}
+
+function submitDrug(e){
+  e.preventDefault();
+  const g = id => document.getElementById(id).value.trim();
+  const name = g('f-name');
+  let cls = g('f-cls');
+  if(cls==='__new') cls = g('f-newcls') || 'Uncategorized';
+  if(!name || !cls) return false;
+  const fields = {name,cls,sub:g('f-sub')||'—',route:g('f-route')||'—',clr:g('f-clr')||'—',hl:g('f-hl')||'—',
+    moa:g('f-moa')||'—',ind:g('f-ind')||'—',dose:g('f-dose')||'—',adr:g('f-adr')||'—',contra:g('f-contra')||'—'};
+  if(state.editId){
+    const d = DRUGS.find(x=>x.id===state.editId);
+    Object.assign(d, fields);
+    save();
+    showDrug(d.id);
+  } else {
+    const id = slug(name) + (DRUGS.some(d=>d.id===slug(name)) ? '-' + Date.now() : '');
+    DRUGS.push({id,...fields});
+    save();
+    showDrug(id);
+  }
+  return false;
+}
+
+render();
+</script>
+</body>
+</html>
